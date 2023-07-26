@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"gitee.com/baixudong/gospider/tools"
+	"gitee.com/baixudong/tools"
 	frpc "github.com/fatedier/frp/client"
 	"github.com/fatedier/frp/pkg/auth"
 	"github.com/fatedier/frp/pkg/config"
