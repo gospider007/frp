@@ -26,6 +26,9 @@ type ServerOption struct {
 }
 
 func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
+	if ctx == nil {
+		ctx = context.TODO()
+	}
 	log.InitLog("console", "console", "error", 3, false)
 	if option.Token == "" {
 		return nil, errors.New("没有token,你想被攻击吗？")

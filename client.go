@@ -34,6 +34,9 @@ type ClientOption struct {
 }
 
 func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
+	if ctx == nil {
+		ctx = context.TODO()
+	}
 	log.InitLog("console", "console", "error", 3, false)
 	if option.Token == "" {
 		return nil, errors.New("没有token,我认为你铁定连接不上服务")
