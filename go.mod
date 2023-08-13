@@ -3,7 +3,7 @@ module gitee.com/baixudong/frp
 go 1.21.0
 
 require (
-	gitee.com/baixudong/tools v0.0.0-20230726070525-d80da902e36d
+	gitee.com/baixudong/tools v0.0.0-20230809033109-88a3a8985c88
 	github.com/fatedier/frp v0.51.2
 )
 
@@ -51,9 +51,8 @@ require (
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.42.0 // indirect
 	github.com/prometheus/procfs v0.10.1 // indirect
-	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
-	github.com/quic-go/qtls-go1-20 v0.2.2 // indirect
-	github.com/quic-go/quic-go v0.36.2 // indirect
+	github.com/quic-go/qtls-go1-20 v0.3.1 // indirect
+	github.com/quic-go/quic-go v0.37.4 // indirect
 	github.com/samber/lo v1.38.1 // indirect
 	github.com/templexxx/cpufeat v0.0.0-20180724012125-cef66df7f161 // indirect
 	github.com/templexxx/xor v0.0.0-20191217153810-f85b25db303b // indirect
