@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"gitee.com/baixudong/frp"
+	"github.com/gospider007/frp"
 )
 
 func TestFprc(t *testing.T) {

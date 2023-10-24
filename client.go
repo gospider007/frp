@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 
-	"gitee.com/baixudong/tools"
 	frpc "github.com/fatedier/frp/client"
 	"github.com/fatedier/frp/pkg/auth"
 	"github.com/fatedier/frp/pkg/config"
 	"github.com/fatedier/frp/pkg/util/log"
+	"github.com/google/uuid"
 )
 
 type Client struct {
@@ -56,7 +56,7 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	if option.RemotePort == 0 {
 		return nil, errors.New("没有设置开放端口,你要从哪接收外部流量？")
 	}
-	Name := tools.Uuid().String()
+	Name := uuid.New().String()
 	svr, err := frpc.NewService(
 		config.ClientCommonConf{
 			ClientConfig: auth.ClientConfig{
