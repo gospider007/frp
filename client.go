@@ -5,8 +5,7 @@ import (
 	"errors"
 
 	frpc "github.com/fatedier/frp/client"
-	"github.com/fatedier/frp/pkg/auth"
-	"github.com/fatedier/frp/pkg/config"
+	v1 "github.com/fatedier/frp/pkg/config/v1"
 	"github.com/fatedier/frp/pkg/util/log"
 	"github.com/google/uuid"
 )
@@ -37,7 +36,8 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	if ctx == nil {
 		ctx = context.TODO()
 	}
-	log.InitLog("console", "console", "error", 3, false)
+	log.InitLog("console", "error", 3, false)
+
 	if option.Token == "" {
 		return nil, errors.New("没有token,我认为你铁定连接不上服务")
 	}
@@ -57,45 +57,47 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 		return nil, errors.New("没有设置开放端口,你要从哪接收外部流量？")
 	}
 	Name := uuid.New().String()
+	tcpMux := true
 	svr, err := frpc.NewService(
-		config.ClientCommonConf{
-			ClientConfig: auth.ClientConfig{
-				BaseConfig: auth.BaseConfig{
-					AuthenticationMethod: "token",
+		frpc.ServiceOptions{
+			Common: &v1.ClientCommonConfig{
+				Transport: v1.ClientTransportConfig{
+					Protocol:                "tcp",
+					DialServerTimeout:       10,
+					DialServerKeepAlive:     7200,
+					PoolCount:               1,
+					TCPMux:                  &tcpMux,
+					TCPMuxKeepaliveInterval: 60,
+					HeartbeatInterval:       30,
+					HeartbeatTimeout:        90,
 				},
-				TokenConfig: auth.TokenConfig{Token: option.Token},
+				Auth: v1.AuthClientConfig{
+					Method: v1.AuthMethodToken,
+					Token:  option.Token,
+				},
+				ServerAddr: option.ServerHost,
+				ServerPort: option.ServerPort,
 			},
-			Protocol:   "tcp",
-			ServerAddr: option.ServerHost,
-			ServerPort: option.ServerPort,
-
-			DialServerTimeout:       10,
-			DialServerKeepAlive:     7200,
-			PoolCount:               1,
-			TCPMux:                  true,
-			TCPMuxKeepaliveInterval: 60,
-			LoginFailExit:           true,
-			QUICKeepalivePeriod:     10,
-			QUICMaxIdleTimeout:      30,
-			QUICMaxIncomingStreams:  100000,
-			HeartbeatInterval:       30,
-			HeartbeatTimeout:        90,
-			UDPPacketSize:           1500,
-		},
-		map[string]config.ProxyConf{
-			Name: &config.TCPProxyConf{
-				RemotePort: option.RemotePort,
-				BaseProxyConf: config.BaseProxyConf{
-					Group:          option.Group,
-					ProxyName:      Name,
-					UseCompression: true,
-					LocalSvrConf: config.LocalSvrConf{
-						LocalIP:   option.Host,
-						LocalPort: option.Port,
+			ProxyCfgs: []v1.ProxyConfigurer{
+				&v1.TCPProxyConfig{
+					RemotePort: option.RemotePort,
+					ProxyBaseConfig: v1.ProxyBaseConfig{
+						ProxyBackend: v1.ProxyBackend{
+							LocalIP:   option.Host,
+							LocalPort: option.Port,
+						},
+						Transport: v1.ProxyTransport{
+							UseCompression: true,
+						},
+						LoadBalancer: v1.LoadBalancerConfig{
+							Group: option.Group,
+						},
+						Name: Name,
+						Type: "tcp",
 					},
 				},
 			},
-		}, nil, "",
+		},
 	)
 	return &Client{svr: svr, ctx: ctx}, err
 }
