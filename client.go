@@ -12,11 +12,13 @@ import (
 
 type Client struct {
 	svr *frpc.Service
-	ctx context.Context
 }
 
-func (obj *Client) Run() {
-	obj.svr.Run(obj.ctx)
+func (obj *Client) Run(ctx context.Context) error {
+	if ctx == nil {
+		ctx = context.TODO()
+	}
+	return obj.svr.Run(ctx)
 }
 func (obj *Client) Close() {
 	obj.svr.Close()
@@ -37,7 +39,6 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 		ctx = context.TODO()
 	}
 	log.InitLog("console", "error", 3, false)
-
 	if option.Token == "" {
 		return nil, errors.New("没有token,我认为你铁定连接不上服务")
 	}
@@ -56,21 +57,9 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	if option.RemotePort == 0 {
 		return nil, errors.New("没有设置开放端口,你要从哪接收外部流量？")
 	}
-	Name := uuid.New().String()
-	tcpMux := true
 	svr, err := frpc.NewService(
 		frpc.ServiceOptions{
 			Common: &v1.ClientCommonConfig{
-				Transport: v1.ClientTransportConfig{
-					Protocol:                "tcp",
-					DialServerTimeout:       10,
-					DialServerKeepAlive:     7200,
-					PoolCount:               1,
-					TCPMux:                  &tcpMux,
-					TCPMuxKeepaliveInterval: 60,
-					HeartbeatInterval:       30,
-					HeartbeatTimeout:        90,
-				},
 				Auth: v1.AuthClientConfig{
 					Method: v1.AuthMethodToken,
 					Token:  option.Token,
@@ -92,12 +81,11 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 						LoadBalancer: v1.LoadBalancerConfig{
 							Group: option.Group,
 						},
-						Name: Name,
-						Type: "tcp",
+						Name: uuid.New().String(),
 					},
 				},
 			},
 		},
 	)
-	return &Client{svr: svr, ctx: ctx}, err
+	return &Client{svr: svr}, err
 }

@@ -42,22 +42,20 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 	svr, err := frps.NewService(
 		&v1.ServerConfig{
 			Auth: v1.AuthServerConfig{
-				Token:  option.Token,
 				Method: v1.AuthMethodToken,
+				Token:  option.Token,
 			},
+			BindAddr: option.Host,
+			BindPort: option.Port,
 			Transport: v1.ServerTransportConfig{
 				TCPMux:                  &tcpMux,
-				TCPMuxKeepaliveInterval: 60,
-				TCPKeepAlive:            60,
-				MaxPoolCount:            5,
+				TCPMuxKeepaliveInterval: 90,
+				TCPKeepAlive:            90,
+				MaxPoolCount:            10,
 				HeartbeatTimeout:        90,
 			},
-			VhostHTTPTimeout:  60,
-			MaxPortsPerClient: 0,
-			UserConnTimeout:   10,
-			UDPPacketSize:     1500,
-			BindAddr:          option.Host,
-			BindPort:          option.Port,
+			UserConnTimeout: 10,
+			UDPPacketSize:   1500,
 		},
 	)
 	return &Server{svr: svr, ctx: ctx}, err
