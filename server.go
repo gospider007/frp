@@ -28,7 +28,7 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 	if ctx == nil {
 		ctx = context.TODO()
 	}
-	log.InitLog("console", "error", 3, false)
+	log.InitLogger("console", "error", 3, false)
 	if option.Token == "" {
 		return nil, errors.New("没有token,你想被攻击吗？")
 	}

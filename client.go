@@ -12,13 +12,11 @@ import (
 
 type Client struct {
 	svr *frpc.Service
+	ctx context.Context
 }
 
-func (obj *Client) Run(ctx context.Context) error {
-	if ctx == nil {
-		ctx = context.TODO()
-	}
-	return obj.svr.Run(ctx)
+func (obj *Client) Run() error {
+	return obj.svr.Run(obj.ctx)
 }
 func (obj *Client) Close() {
 	obj.svr.Close()
@@ -35,10 +33,7 @@ type ClientOption struct {
 }
 
 func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
-	if ctx == nil {
-		ctx = context.TODO()
-	}
-	log.InitLog("console", "error", 3, false)
+	log.InitLogger("console", "error", 3, false)
 	if option.Token == "" {
 		return nil, errors.New("没有token,我认为你铁定连接不上服务")
 	}
@@ -56,6 +51,9 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 	}
 	if option.RemotePort == 0 {
 		return nil, errors.New("没有设置开放端口,你要从哪接收外部流量？")
+	}
+	if ctx == nil {
+		ctx = context.TODO()
 	}
 	svr, err := frpc.NewService(
 		frpc.ServiceOptions{
@@ -87,5 +85,5 @@ func NewClient(ctx context.Context, option ClientOption) (*Client, error) {
 			},
 		},
 	)
-	return &Client{svr: svr}, err
+	return &Client{svr: svr, ctx: ctx}, err
 }
