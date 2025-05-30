@@ -17,6 +17,9 @@ type Server struct {
 func (obj *Server) Run() {
 	obj.svr.Run(obj.ctx)
 }
+func (obj *Server) Close() error {
+	return obj.svr.Close()
+}
 
 type ServerOption struct {
 	Host  string //服务端host,默认0.0.0.0
@@ -38,6 +41,7 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 	if option.Port == 0 {
 		return nil, errors.New("服务端没有设置监听端口,你确定要这样？")
 	}
+	tcpMux := true
 	svr, err := frps.NewService(
 		&v1.ServerConfig{
 			Auth: v1.AuthServerConfig{
@@ -46,6 +50,10 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 			},
 			BindAddr: option.Host,
 			BindPort: option.Port,
+			Transport: v1.ServerTransportConfig{
+				TCPMux:                  &tcpMux,
+				TCPMuxKeepaliveInterval: 90,
+			},
 		},
 	)
 	return &Server{svr: svr, ctx: ctx}, err
