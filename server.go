@@ -53,7 +53,12 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 			Transport: v1.ServerTransportConfig{
 				TCPMux:                  &tcpMux,
 				TCPMuxKeepaliveInterval: 90,
+				TCPKeepAlive:            90,
+				MaxPoolCount:            100,
+				HeartbeatTimeout:        90,
 			},
+			UserConnTimeout: 10,
+			UDPPacketSize:   1500,
 		},
 	)
 	return &Server{svr: svr, ctx: ctx}, err
