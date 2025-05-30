@@ -38,7 +38,6 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 	if option.Port == 0 {
 		return nil, errors.New("服务端没有设置监听端口,你确定要这样？")
 	}
-	tcpMux := true
 	svr, err := frps.NewService(
 		&v1.ServerConfig{
 			Auth: v1.AuthServerConfig{
@@ -47,15 +46,6 @@ func NewServer(ctx context.Context, option ServerOption) (*Server, error) {
 			},
 			BindAddr: option.Host,
 			BindPort: option.Port,
-			Transport: v1.ServerTransportConfig{
-				TCPMux:                  &tcpMux,
-				TCPMuxKeepaliveInterval: 90,
-				TCPKeepAlive:            90,
-				MaxPoolCount:            10,
-				HeartbeatTimeout:        90,
-			},
-			UserConnTimeout: 10,
-			UDPPacketSize:   1500,
 		},
 	)
 	return &Server{svr: svr, ctx: ctx}, err
