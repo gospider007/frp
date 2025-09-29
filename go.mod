@@ -3,7 +3,7 @@ module github.com/gospider007/frp
 go 1.25
 
 require (
-	github.com/fatedier/frp v0.64.0
+	github.com/fatedier/frp v0.65.0
 	github.com/google/uuid v1.6.0
 )
 
@@ -39,7 +39,7 @@ require (
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.17.0 // indirect
-	github.com/quic-go/quic-go v0.54.0 // indirect
+	github.com/quic-go/quic-go v0.54.1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/samber/lo v1.51.0 // indirect
 	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8 // indirect
