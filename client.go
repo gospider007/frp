@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	frpc "github.com/fatedier/frp/client"
+	"github.com/fatedier/frp/pkg/config/source"
 	v1 "github.com/fatedier/frp/pkg/config/v1"
 	"github.com/fatedier/frp/pkg/util/log"
 	"github.com/google/uuid"
@@ -57,6 +58,11 @@ func NewClient(ctx context.Context, serverOption ServerOption, clientOption ...C
 		},
 		)
 	}
+	newConfigSource := source.NewConfigSource()
+	err := newConfigSource.ReplaceAll(ProxyCfgs, nil)
+	if err != nil {
+		return nil, err
+	}
 	svr, err := frpc.NewService(
 		frpc.ServiceOptions{
 			Common: &v1.ClientCommonConfig{
@@ -67,7 +73,7 @@ func NewClient(ctx context.Context, serverOption ServerOption, clientOption ...C
 				ServerAddr: serverOption.Host,
 				ServerPort: serverOption.Port,
 			},
-			ProxyCfgs: ProxyCfgs,
+			ConfigSourceAggregator: source.NewAggregator(newConfigSource),
 		},
 	)
 	return &Client{svr: svr, ctx: ctx}, err
