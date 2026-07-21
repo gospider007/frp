@@ -23,8 +23,8 @@ github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1m
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/fatedier/frp v0.70.0 h1:5npdi2dmJu+hBqzIbzO3RufDzodgt+CwWOx/UIgvdIk=
 github.com/fatedier/frp v0.70.0/go.mod h1:h6UP/0bhnurYzBPORBgbP+aZByDMpzWOErJNNoFdoJo=
-github.com/fatedier/golib v0.7.1 h1:xk7Sww6/5o6PPiMKNYUEQFh4lLsvFP2ISyW4aCfjk4s=
-github.com/fatedier/golib v0.7.1/go.mod h1:ArUGvPg2cOw/py2RAuBt46nNZH2VQ5Z70p109MAZpJw=
+github.com/fatedier/golib v0.8.0 h1:LQC8Mly/N71CUnFmgZMfQGrCA4h0tghg9pcDx58uG10=
+github.com/fatedier/golib v0.8.0/go.mod h1:ArUGvPg2cOw/py2RAuBt46nNZH2VQ5Z70p109MAZpJw=
 github.com/go-jose/go-jose/v4 v4.1.4 h1:moDMcTHmvE6Groj34emNPLs/qtYXRVcd6S7NHbHz3kA=
 github.com/go-jose/go-jose/v4 v4.1.4/go.mod h1:x4oUasVrzR7071A4TnHLGSPpNOm2a21K9Kf04k1rs08=
 github.com/go-logr/logr v1.4.4 h1:tG4xh9yMsRCAiodLVTxyrkzSZ9+o0L1Kg/+cPVcbP/8=
