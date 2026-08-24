@@ -1,6 +1,6 @@
 module github.com/gospider007/frp
 
-go 1.26.0
+go 1.27.0
 
 require (
 	github.com/fatedier/frp v0.70.1
